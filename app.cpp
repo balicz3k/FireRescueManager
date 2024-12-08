@@ -7,7 +7,7 @@ void simulation(CentralUnit& CU)
     while (true)
     {
         CU.reportAccident(Accident());
-        // std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 1000));
     }
 }
 
@@ -46,13 +46,23 @@ int main()
 
     std::thread simulateThread1(simulation, std::ref(centralUnit));
     simulateThread1.detach();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::thread simulateThread2(simulation, std::ref(centralUnit));
     simulateThread2.detach();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::thread simulateThread3(simulation, std::ref(centralUnit));
+    simulateThread3.detach();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::thread simulateThread4(simulation, std::ref(centralUnit));
+    simulateThread4.detach();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::thread simulateThread5(simulation, std::ref(centralUnit));
+    simulateThread5.detach();
 
     while (true)
     {
         clearScreen();
         centralUnit.printInfo();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }

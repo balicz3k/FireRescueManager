@@ -1,4 +1,5 @@
 #pragma once
+#include <mutex>
 #include "PointWGS.hpp"
 #include "State.hpp"
 
@@ -7,6 +8,7 @@ class FireEngine
     int id_;
     PointWGS location_;
     std::shared_ptr<IState> state_;
+    mutable std::mutex mtx_;
 
 public:
     FireEngine() = delete;

@@ -41,10 +41,6 @@ public:
         std::for_each(
             fireRescueUnits_.begin(),
             fireRescueUnits_.end(),
-            [](const auto fireRescueUnit)
-            {
-                fireRescueUnit->printInfo();
-                std::cout << std::endl;
-            });
+            [](const auto fireRescueUnit) { fireRescueUnit->printInfo(); });
     }
 };
