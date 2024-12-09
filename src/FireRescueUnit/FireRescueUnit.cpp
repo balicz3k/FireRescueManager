@@ -1,4 +1,5 @@
 #include "FireRescueUnit.hpp"
+#include <algorithm>
 #include <chrono>
 #include <numeric>
 #include <thread>
@@ -8,16 +9,13 @@ FireRescueUnit::FireRescueUnit(const std::string& name, const PointWGS& location
     // addign 5 fire engines to the unit
     for (int i = 1; i <= 5; i++)
     {
-        auto fireEngine{std::make_shared<FireEngine>(i, location, std::make_shared<FreeState>())};
+        auto fireEngine{std::make_shared<FireEngine>(i, name)};
         fireEngines_.push_back(fireEngine);
     }
 }
 
 FireRescueUnit::FireRescueUnit(FireRescueUnit&& other) noexcept
-    : name_(std::move(other.name_))
-    , location_(std::move(other.location_))
-    , state_(std::move(other.state_))
-    , fireEngines_(std::move(other.fireEngines_))
+    : name_(std::move(other.name_)), location_(std::move(other.location_)), fireEngines_(std::move(other.fireEngines_))
 {
 }
 
@@ -27,7 +25,6 @@ FireRescueUnit& FireRescueUnit::operator=(FireRescueUnit&& other) noexcept
     {
         name_ = std::move(other.name_);
         location_ = std::move(other.location_);
-        state_ = std::move(other.state_);
         fireEngines_ = std::move(other.fireEngines_);
     }
     return *this;
@@ -40,6 +37,22 @@ void FireRescueUnit::printInfo() const
     std::cout << std::endl;
 }
 
+bool FireRescueUnit::attachForAllFireEngines(FireEngineObserver* observer)
+{
+    return std::all_of(
+        fireEngines_.begin(),
+        fireEngines_.end(),
+        [observer](const auto fireEngine) { return fireEngine->attach(observer); });
+}
+
+bool FireRescueUnit::detachForAllFireEngines(FireEngineObserver* observer)
+{
+    return std::all_of(
+        fireEngines_.begin(),
+        fireEngines_.end(),
+        [observer](const auto fireEngine) { return fireEngine->detach(observer); });
+}
+
 uint8_t FireRescueUnit::reportAvailability(const uint8_t& numOfFireEngines) const
 {
     uint8_t numOfFreeFireEngines = 0;
@@ -49,25 +62,21 @@ uint8_t FireRescueUnit::reportAvailability(const uint8_t& numOfFireEngines) cons
         {
             numOfFreeFireEngines++;
         }
-        if (numOfFreeFireEngines >= numOfFireEngines)
-        {
-            return numOfFreeFireEngines;
-        }
     }
-    return numOfFreeFireEngines;
+    return std::min(numOfFreeFireEngines, numOfFireEngines);
 }
 
 void FireRescueUnit::handleAccident(const Accident& accident)
 {
     uint8_t numOfFireEngines = accident.neededFireEngines();
-    std::vector<std::shared_ptr<FireEngine>> fireEnginesForAccident;
+    std::vector<std::shared_ptr<FireEngine>> fireEnginesSelectedForAccident;
     for (auto fireEngine : fireEngines_)
     {
         if (fireEngine->isFree())
         {
             fireEngine->changeState(std::make_unique<OnTheWayToAnAccidentState>());
             numOfFireEngines--;
-            fireEnginesForAccident.push_back(fireEngine);
+            fireEnginesSelectedForAccident.push_back(fireEngine);
         }
 
         if (numOfFireEngines == 0)
@@ -76,17 +85,23 @@ void FireRescueUnit::handleAccident(const Accident& accident)
         }
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 3000));
-    for (auto fireEngine : fireEnginesForAccident)
+
+    const auto isRealAccident = rand() % 100 < 95;
+    if (isRealAccident)
     {
-        fireEngine->changeState(std::make_unique<InActionState>());
+        for (auto fireEngine : fireEnginesSelectedForAccident)
+        {
+            fireEngine->changeState(std::make_unique<InActionState>());
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 3000));
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 3000));
-    for (auto fireEngine : fireEnginesForAccident)
+
+    for (auto fireEngine : fireEnginesSelectedForAccident)
     {
         fireEngine->changeState(std::make_unique<OnTheWayToTheBaseState>());
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 3000));
-    for (auto fireEngine : fireEnginesForAccident)
+    for (auto fireEngine : fireEnginesSelectedForAccident)
     {
         fireEngine->changeState(std::make_unique<FreeState>());
     }

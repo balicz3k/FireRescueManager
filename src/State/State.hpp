@@ -1,33 +1,33 @@
 #pragma once
 #include <iostream>
 
-class IState
+class State
 {
 public:
-    virtual std::string getState() = 0;
-    virtual ~IState() = default;
+    virtual std::string toString() = 0;
+    virtual ~State() = default;
 };
 
-class FreeState : public IState
+class FreeState : public State
 {
 public:
-    std::string getState() final { return "Free"; }
+    std::string toString() final { return "Free"; }
 };
 
-class OnTheWayToAnAccidentState : public IState
+class OnTheWayToAnAccidentState : public State
 {
 public:
-    std::string getState() final { return "On the way to an accident"; }
+    std::string toString() final { return "On the way to an accident"; }
 };
 
-class InActionState : public IState
+class InActionState : public State
 {
 public:
-    std::string getState() final { return "In action"; }
+    std::string toString() final { return "In action"; }
 };
 
-class OnTheWayToTheBaseState : public IState
+class OnTheWayToTheBaseState : public State
 {
 public:
-    std::string getState() final { return "On the way to the base"; }
+    std::string toString() final { return "On the way to the base"; }
 };

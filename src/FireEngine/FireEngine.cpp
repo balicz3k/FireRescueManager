@@ -1,24 +1,47 @@
 #include "FireEngine.hpp"
 
-FireEngine::FireEngine(const int& id, const PointWGS& location, std::shared_ptr<IState> state)
-    : id_(id), location_(location), state_(state)
+FireEngine::FireEngine(const uint8_t& id, const std::string ownerUnitName)
+    : id_(id), ownerUnitName_(std::move(ownerUnitName))
 {
+    state_ = std::make_shared<FreeState>();
 }
 
 void FireEngine::printInfo() const
 {
-    std::lock_guard<std::mutex> lock(mtx_);
-    std::cout << "FireEngine id: " << id_ << " " << state_->getState() << " at " << location_ << std::endl;
+    this->lock();
+    std::cout << "FireEngine id: " << id_ << " " << state_->toString() << std::endl;
 }
 
 bool FireEngine::isFree() const
 {
     std::lock_guard<std::mutex> lock(mtx_);
-    return state_->getState() == "Free";
+    return state_->toString() == "Free";
 }
 
-void FireEngine::changeState(std::shared_ptr<IState> state)
+void FireEngine::changeState(std::shared_ptr<State> state)
 {
-    std::lock_guard<std::mutex> lock(mtx_);
+    this->lock();
+    this->notify(state);
     state_ = std::move(state);
+}
+
+bool FireEngine::attach(FireEngineOberver* observer)
+{
+    this->lock();
+    return observers_.insert(observer).second;
+}
+
+bool FireEngine::detach(FireEngineOberver* observer)
+{
+    this->lock();
+    return observers_.erase(observer) == 1;
+}
+
+void FireEngine::notify(std::shared_ptr<State> state)
+{
+    this->lock();
+    for (const auto& observer : observers_)
+    {
+        observer->update(*this, state);
+    }
 }
