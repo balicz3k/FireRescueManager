@@ -25,23 +25,24 @@ void FireEngine::changeState(std::shared_ptr<State> state)
     state_ = std::move(state);
 }
 
-bool FireEngine::attach(FireEngineOberver* observer)
+void FireEngine::attach(FireEngineOberver* observer)
 {
     this->lock();
-    return observers_.insert(observer).second;
+    this->observers_.add(observer);
 }
 
-bool FireEngine::detach(FireEngineOberver* observer)
+void FireEngine::detach(FireEngineOberver* observer)
 {
     this->lock();
-    return observers_.erase(observer) == 1;
+    observers_.remove(observer);
 }
 
 void FireEngine::notify(std::shared_ptr<State> state)
 {
     this->lock();
-    for (const auto& observer : observers_)
+    auto it = observers_.createIterator();
+    while (it->hasNext())
     {
-        observer->update(*this, state);
+        it->next()->update(*this, state);
     }
 }

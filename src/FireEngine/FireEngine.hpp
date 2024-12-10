@@ -1,6 +1,7 @@
 #pragma once
 #include <mutex>
 #include <set>
+#include "Container.hpp"
 #include "Observer.hpp"
 #include "PointWGS.hpp"
 #include "State.hpp"
@@ -11,7 +12,10 @@ class FireEngine
     int id_;
     std::string ownerUnitName_;
     std::shared_ptr<State> state_;
-    std::set<FireEngineOberver*> observers_;
+    // std::set<FireEngineOberver*> observers_;
+
+    Container<FireEngineOberver*> observers_;
+
     mutable std::mutex mtx_;
 
 public:
@@ -19,8 +23,8 @@ public:
     FireEngine(const uint8_t& id, const std::string ownerUnitName);
     uint8_t getId() const { return id_; }
     std::string getOwnerUnitName() const { return ownerUnitName_; }
-    bool attach(FireEngineOberver* observer);
-    bool detach(FireEngineOberver* observer);
+    void attach(FireEngineOberver* observer);
+    void detach(FireEngineOberver* observer);
     void notify(std::shared_ptr<State> state);
     void printInfo() const;
     bool isFree() const;

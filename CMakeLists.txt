@@ -38,4 +38,5 @@ target_include_directories(
     src/Observer
     src/Simulation
     src/Strategy
+    src/Container
 )

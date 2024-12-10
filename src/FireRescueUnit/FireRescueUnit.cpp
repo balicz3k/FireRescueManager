@@ -37,20 +37,16 @@ void FireRescueUnit::printInfo() const
     std::cout << std::endl;
 }
 
-bool FireRescueUnit::attachForAllFireEngines(FireEngineObserver* observer)
+void FireRescueUnit::attachForAllFireEngines(FireEngineObserver* observer)
 {
-    return std::all_of(
-        fireEngines_.begin(),
-        fireEngines_.end(),
-        [observer](const auto fireEngine) { return fireEngine->attach(observer); });
+    std::for_each(
+        fireEngines_.begin(), fireEngines_.end(), [observer](const auto fireEngine) { fireEngine->attach(observer); });
 }
 
-bool FireRescueUnit::detachForAllFireEngines(FireEngineObserver* observer)
+void FireRescueUnit::detachForAllFireEngines(FireEngineObserver* observer)
 {
-    return std::all_of(
-        fireEngines_.begin(),
-        fireEngines_.end(),
-        [observer](const auto fireEngine) { return fireEngine->detach(observer); });
+    std::for_each(
+        fireEngines_.begin(), fireEngines_.end(), [observer](const auto fireEngine) { fireEngine->detach(observer); });
 }
 
 uint8_t FireRescueUnit::reportAvailability(const uint8_t& numOfFireEngines) const

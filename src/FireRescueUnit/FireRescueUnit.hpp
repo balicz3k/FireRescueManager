@@ -19,8 +19,8 @@ public:
     void printInfo() const;
     uint8_t reportAvailability(const uint8_t& numOfFireEngines) const;
     void handleAccident(uint8_t numOfFireEngines);
-    bool attachForAllFireEngines(FireEngineObserver* observer);
-    bool detachForAllFireEngines(FireEngineObserver* observer);
+    void attachForAllFireEngines(FireEngineObserver* observer);
+    void detachForAllFireEngines(FireEngineObserver* observer);
     static bool cmp(const FireRescueUnit& a, const FireRescueUnit& b, const PointWGS& accidentLocation)
     {
         return PointWGS::calculateDistance(a.location_, accidentLocation) <
