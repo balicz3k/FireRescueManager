@@ -66,9 +66,8 @@ uint8_t FireRescueUnit::reportAvailability(const uint8_t& numOfFireEngines) cons
     return std::min(numOfFreeFireEngines, numOfFireEngines);
 }
 
-void FireRescueUnit::handleAccident(const Accident& accident)
+void FireRescueUnit::handleAccident(uint8_t numOfFireEngines)
 {
-    uint8_t numOfFireEngines = accident.neededFireEngines();
     std::vector<std::shared_ptr<FireEngine>> fireEnginesSelectedForAccident;
     for (auto fireEngine : fireEngines_)
     {
@@ -93,7 +92,7 @@ void FireRescueUnit::handleAccident(const Accident& accident)
         {
             fireEngine->changeState(std::make_unique<InActionState>());
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 3000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000 + rand() % 20000));
     }
 
     for (auto fireEngine : fireEnginesSelectedForAccident)

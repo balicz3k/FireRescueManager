@@ -18,7 +18,7 @@ public:
     FireRescueUnit(const std::string& name, const PointWGS& location);
     void printInfo() const;
     uint8_t reportAvailability(const uint8_t& numOfFireEngines) const;
-    void handleAccident(const Accident& accident);
+    void handleAccident(uint8_t numOfFireEngines);
     bool attachForAllFireEngines(FireEngineObserver* observer);
     bool detachForAllFireEngines(FireEngineObserver* observer);
     static bool cmp(const FireRescueUnit& a, const FireRescueUnit& b, const PointWGS& accidentLocation)

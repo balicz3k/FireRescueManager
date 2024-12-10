@@ -1,5 +1,7 @@
 #include "CentralUnit.hpp"
 #include <algorithm>
+#include "FireStrategy.hpp"
+#include "LocalThreatStrategy.hpp"
 
 CentralUnit::CentralUnit()
     : fireRescueUnits_{/* Westerplatte 19, Kraków */
@@ -29,8 +31,8 @@ CentralUnit::CentralUnit()
 
 void CentralUnit::reportAccident(const Accident& accident)
 {
-    uint8_t numOfNeededFireEngines = accident.neededFireEngines();
-
+    strategy_ = accident.adjustStrategy();
+    uint8_t numOfNeededFireEngines = strategy_->calculate();
     sort(
         fireRescueUnits_.begin(),
         fireRescueUnits_.end(),
@@ -42,12 +44,12 @@ void CentralUnit::reportAccident(const Accident& accident)
         auto reportedNumOfFireEngines = fireRescueUnit->reportAvailability(numOfNeededFireEngines);
         if (reportedNumOfFireEngines >= numOfNeededFireEngines)
         {
-            fireRescueUnit->handleAccident(accident);
+            fireRescueUnit->handleAccident(numOfNeededFireEngines);
             return;
         }
         else if (reportedNumOfFireEngines > 0)
         {
-            fireRescueUnit->handleAccident(accident);
+            fireRescueUnit->handleAccident(reportedNumOfFireEngines);
             numOfNeededFireEngines -= reportedNumOfFireEngines;
         }
     }

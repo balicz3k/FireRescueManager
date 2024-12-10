@@ -2,6 +2,7 @@
 
 #include <string>
 #include "PointWGS.hpp"
+#include "Strategy.hpp"
 
 class Accident
 {
@@ -10,7 +11,7 @@ class Accident
 
 public:
     Accident() : location_(PointWGS::randomPointWGS()) { type_ = (rand() % 100 < 70 ? "MZ" : "PZ"); }
-    uint8_t neededFireEngines() const { return type_ == "MZ" ? 3 : 2; }
     PointWGS getLocation() const { return location_; }
     std::string getType() const { return type_; }
+    std::shared_ptr<Strategy> adjustStrategy() const;
 };

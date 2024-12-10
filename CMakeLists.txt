@@ -13,6 +13,7 @@ file(GLOB FIRE_RESCUE_UNIT "src/FireRescueUnit/*.cpp")
 file(GLOB CENTRAL_UNIT "src/CentralUnit/*.cpp")
 file(GLOB FIRE_ENGINE_OBSERVER "src/Observer/*.cpp")
 file(GLOB SIMULATION "src/Simulation/*.cpp")
+file(GLOB ACCIDENT "src/Accident/*.cpp")
 
 add_executable(
     ${PROJECT_NAME} 
@@ -21,6 +22,7 @@ add_executable(
     ${FIRE_ENGINE}
     ${FIRE_RESCUE_UNIT}
     ${FIRE_ENGINE_OBSERVER}
+    ${ACCIDENT}
     ${CENTRAL_UNIT}
     ${SIMULATION}
 )
@@ -31,8 +33,9 @@ target_include_directories(
     src/FireRescueUnit
     src/FireEngine
     src/Accident
-    src/State
     src/CentralUnit
+    src/State
     src/Observer
     src/Simulation
+    src/Strategy
 )
