@@ -18,7 +18,7 @@ CentralUnit::CentralUnit()
                        std::make_shared<FireRescueUnit>("JRG-6", PointWGS(50.0159353, 20.0156738)),
                        /* Rozrywka 26, Kraków */
                        std::make_shared<FireRescueUnit>("JRG-7", PointWGS(50.0941204, 19.977386)),
-                       /* // Piłsudskiego 20, Skawina */
+                       /* Piłsudskiego 20, Skawina */
                        std::make_shared<FireRescueUnit>("JRG w Skawinie", PointWGS(49.9721806, 19.7960337)),
                        /* Zgody 18, Kraków */
                        std::make_shared<FireRescueUnit>("JRG SA PSP w Krakowie", PointWGS(50.0773545, 20.0330222))}
@@ -53,12 +53,4 @@ void CentralUnit::reportAccident(const Accident& accident)
             numOfNeededFireEngines -= reportedNumOfFireEngines;
         }
     }
-}
-
-void CentralUnit::printInfo() const
-{
-    std::for_each(
-        fireRescueUnits_.begin(),
-        fireRescueUnits_.end(),
-        [](const auto fireRescueUnit) { fireRescueUnit->printInfo(); });
 }

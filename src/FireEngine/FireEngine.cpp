@@ -6,12 +6,6 @@ FireEngine::FireEngine(const uint8_t& id, const std::string ownerUnitName)
     state_ = std::make_shared<FreeState>();
 }
 
-void FireEngine::printInfo() const
-{
-    this->lock();
-    std::cout << "FireEngine id: " << id_ << " " << state_->toString() << std::endl;
-}
-
 bool FireEngine::isFree() const
 {
     std::lock_guard<std::mutex> lock(mtx_);

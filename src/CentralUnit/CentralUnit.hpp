@@ -18,5 +18,4 @@ public:
     void addFireRescueUnit(std::shared_ptr<FireRescueUnit> a) { fireRescueUnits_.push_back(a); }
     void reportAccident(const Accident& accident);
     void setStrategy(std::shared_ptr<Strategy> strategy) { strategy_ = std::move(strategy); }
-    void printInfo() const;
 };

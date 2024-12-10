@@ -12,7 +12,6 @@ class FireEngine
     int id_;
     std::string ownerUnitName_;
     std::shared_ptr<State> state_;
-    // std::set<FireEngineOberver*> observers_;
 
     Container<FireEngineOberver*> observers_;
 
@@ -26,7 +25,6 @@ public:
     void attach(FireEngineOberver* observer);
     void detach(FireEngineOberver* observer);
     void notify(std::shared_ptr<State> state);
-    void printInfo() const;
     bool isFree() const;
     std::shared_ptr<State> getState() const { return state_; }
     void changeState(std::shared_ptr<State> state);

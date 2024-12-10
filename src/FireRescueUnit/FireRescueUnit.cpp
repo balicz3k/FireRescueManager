@@ -30,13 +30,6 @@ FireRescueUnit& FireRescueUnit::operator=(FireRescueUnit&& other) noexcept
     return *this;
 }
 
-void FireRescueUnit::printInfo() const
-{
-    std::cout << "FireRescueUnit name: " << name_ << std::endl;
-    std::for_each(fireEngines_.begin(), fireEngines_.end(), [](const auto fireEngine) { fireEngine->printInfo(); });
-    std::cout << std::endl;
-}
-
 void FireRescueUnit::attachForAllFireEngines(FireEngineObserver* observer)
 {
     std::for_each(

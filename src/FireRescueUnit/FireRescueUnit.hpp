@@ -16,7 +16,6 @@ public:
     FireRescueUnit(FireRescueUnit&& a) noexcept;
     FireRescueUnit& operator=(FireRescueUnit&& other) noexcept;
     FireRescueUnit(const std::string& name, const PointWGS& location);
-    void printInfo() const;
     uint8_t reportAvailability(const uint8_t& numOfFireEngines) const;
     void handleAccident(uint8_t numOfFireEngines);
     void attachForAllFireEngines(FireEngineObserver* observer);

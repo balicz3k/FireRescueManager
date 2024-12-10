@@ -6,7 +6,7 @@ PointWGS::PointWGS(const long double& x, const long double& y) : latitude_(x), l
 
 PointWGS PointWGS::randomPointWGS()
 {
-    // some hard-coded values form requrements
+    // Area limits
     long double maxLatitute{50.154564013341734};
     long double minLatitute{49.95855025648944};
     long double maxLongitude{20.02470275868903};
